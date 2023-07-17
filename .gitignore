@@ -1,1 +1,9 @@
+# Python virtual environment
 venv
+.venv
+.env
+
+# python gitignore
+__pycache__/
+*.py[cod]
+*$py.class
