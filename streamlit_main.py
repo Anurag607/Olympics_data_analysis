@@ -6,6 +6,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import preprocessor
 import utilites.utils as utils
+import utilites.pie_chart_helper as sc
+
 
 st.title('Olympics Data Analysis')
 st.markdown('Data source: https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results')
@@ -15,7 +17,7 @@ st.sidebar.markdown('Data source: https://www.kaggle.com/heesoo37/120-years-of-o
 
 user_menu = st.sidebar.radio(
     'Select an Option',
-    ('Dummy Page','Country-wise Analysis','Athlete wise Analysis')
+    ('Dummy Page','Country-wise Analysis','Athlete wise Analysis', 'Sex Based Analysis')
 )
 
 @st.cache_data(persist=True)
@@ -26,6 +28,9 @@ def load_data():
     return athletes_df
 
 athletes_df = load_data()   
+
+
+    
 
 if user_menu == 'Dummy Page':
     
@@ -98,3 +103,37 @@ elif user_menu == 'Country-wise Analysis':
         st.write(data)
     
 
+elif user_menu == 'Sex Based Analysis':
+    st.sidebar.title("Sex Based Analysis")
+
+    athletes_df.drop_duplicates(inplace=True)
+    male_df=athletes_df.loc[athletes_df["Sex"]=="M"]
+    gkm=athletes_df.loc[athletes_df['Sex']=='M']
+    gkf=athletes_df.loc[athletes_df['Sex']=='F']
+    medals_m=gkm.groupby('Medal').count()['ID']
+    medals_f=gkf.groupby('Medal').count()['ID']
+    total_athletes=athletes_df['ID'].count()
+    total_male_athlete=gkm['ID'].count()
+    total_female_athlete=gkf['ID'].count()
+    total_male_medalist=gkm['Medal'].count()
+    total_female_medalist=gkf['Medal'].count()
+    
+
+    m_colors=['aquamarine','#D8DADB']
+    f_colors=['turquoise','#D8DADB']
+
+    st.markdown("#### Total Athletes")
+    fig=plt.figure(figsize=(10,6))
+    fig.patch.set_facecolor('#0e1117')
+ 
+    # Change color of text
+    plt.rcParams['text.color'] = 'white'
+    circle=plt.Circle((0,0),0.5,color='white')
+    data=[total_male_athlete,total_female_athlete]
+    plt.pie(data,labels=['Male','Female'],colors=[m_colors[0],f_colors[0]],autopct=lambda pct: sc.pie_pct(pct, data),counterclock=False,startangle=90,pctdistance=0.75,)
+    plt.axis('equal')
+    plt.title('Total Athletes')
+    plt.legend()
+    plt.gca().add_artist(circle)
+    
+    st.pyplot(fig)
