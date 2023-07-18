@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import preprocessor
 import utilites.utils as utils
 import utilites.pie_chart_helper as sc
-
+import utilites.mf_bar_chart_helper as bc
 
 st.title('Olympics Data Analysis')
 st.markdown('Data source: https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results')
@@ -104,36 +104,65 @@ elif user_menu == 'Country-wise Analysis':
     
 
 elif user_menu == 'Sex Based Analysis':
+
     st.sidebar.title("Sex Based Analysis")
+    country_list = athletes_df['region'].dropna().unique().tolist()
+    country_list.sort()
 
-    athletes_df.drop_duplicates(inplace=True)
-    male_df=athletes_df.loc[athletes_df["Sex"]=="M"]
-    gkm=athletes_df.loc[athletes_df['Sex']=='M']
-    gkf=athletes_df.loc[athletes_df['Sex']=='F']
-    medals_m=gkm.groupby('Medal').count()['ID']
-    medals_f=gkf.groupby('Medal').count()['ID']
-    total_athletes=athletes_df['ID'].count()
-    total_male_athlete=gkm['ID'].count()
-    total_female_athlete=gkf['ID'].count()
-    total_male_medalist=gkm['Medal'].count()
-    total_female_medalist=gkf['Medal'].count()
+    selected_country = st.sidebar.selectbox('Select a Country',country_list)
+
+    # Dropped Duplicate Rows 
     
+    medal_tally=athletes_df.drop_duplicates(subset={'Team','NOC','Games','Year','City','Sport','Event','Medal'})
 
-    m_colors=['aquamarine','#D8DADB']
-    f_colors=['turquoise','#D8DADB']
+    total_athletes=medal_tally['ID'].count()
+    total_male_athlete=medal_tally.loc[medal_tally['Sex']=='M']['ID'].count()
+    total_female_athlete=medal_tally.loc[medal_tally['Sex']=='F']['ID'].count()
+    
+    color_scheme=['aquamarine','turquoise']
+    
+    # Plotting Doughnut Chart For Total Athletes
 
     st.markdown("#### Total Athletes")
+
     fig=plt.figure(figsize=(10,6))
     fig.patch.set_facecolor('#0e1117')
- 
-    # Change color of text
     plt.rcParams['text.color'] = 'white'
+
     circle=plt.Circle((0,0),0.5,color='white')
+
     data=[total_male_athlete,total_female_athlete]
-    plt.pie(data,labels=['Male','Female'],colors=[m_colors[0],f_colors[0]],autopct=lambda pct: sc.pie_pct(pct, data),counterclock=False,startangle=90,pctdistance=0.75,)
+    
+    plt.pie(data,labels=['Male','Female'],colors=color_scheme,autopct=lambda pct: sc.pie_pct(pct, data),counterclock=False,startangle=90,pctdistance=0.75,)
     plt.axis('equal')
-    plt.title('Total Athletes')
-    plt.legend()
+    plt.legend(title='Gender',facecolor='#262730',edgecolor='#262730',labelcolor='white')
     plt.gca().add_artist(circle)
     
     st.pyplot(fig)
+
+    # Plotting Bar chart for Sex Based Medal Distribution According To Each Country
+    st.markdown(f"#### Medal Count by Medal Type and Gender For {selected_country}")
+    gk = bc.mf_medal_tally(medal_tally,selected_country)
+    
+    # Create the figure and axes
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    fig.set_facecolor('#262730')
+    # ax.patch.set_facecolor('#262730')
+
+    # Plot the grouped bar chart
+    gk.plot(kind='bar', width=0.7, color=['aquamarine','turquoise'], ax=ax)
+    ax.set_xlabel('Medal',color='white')
+    ax.set_ylabel('Count',color='white')
+    ax.legend(title='Gender', bbox_to_anchor=(1, 1), facecolor='#262730',edgecolor='#262730',labelcolor='white')
+
+    # Set the grid color to light gray
+    ax.xaxis.grid(True, color='lightgray')
+    ax.yaxis.grid(True, color='lightgray')
+
+    # Make the grid appear behind the bars
+    ax.set_axisbelow(True)
+    plt.tight_layout()
+    st.pyplot(fig)
+
+    # Print Raw Data
+    st.dataframe(gk, use_container_width=True)
