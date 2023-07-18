@@ -19,7 +19,7 @@ st.sidebar.markdown('Data source: https://www.kaggle.com/heesoo37/120-years-of-o
 
 user_menu = st.sidebar.radio(
     'Select an Option',
-    ('Dummy Page','Country-wise Analysis','Athlete wise Analysis', 'Sex Based Analysis','Top 10')
+    ('Dummy Page','Country-wise Analysis','Athlete wise Analysis', 'Sex Based Analysis','Performance wise Analysis')
 )
 
 @st.cache_data(persist=True)
@@ -169,13 +169,13 @@ elif user_menu == 'Sex Based Analysis':
     # Print Raw Data
     st.dataframe(gk, use_container_width=True)
 
-elif user_menu == 'Top 10':
+elif user_menu == 'Performance wise Analysis':
 
-    st.sidebar.title("Top 10")
+    st.sidebar.title("Performance wise Analysis")
     feature_list = ['Countries','Athletes']
     feature_list.sort()
 
-    selected_feature = st.sidebar.selectbox('Select a Feature',feature_list)
+    selected_feature = st.sidebar.selectbox('Plot by',feature_list)
     st.markdown(f"### Top 10 {selected_feature} ")
    
     if selected_feature == 'Countries':
@@ -253,7 +253,7 @@ elif user_menu == 'Top 10':
             y='Total',
             color='Name'
         ).properties(
-            width=600,
+            width=800,
             height=400,
             title='Top 10 Athletes'
         )
@@ -263,19 +263,19 @@ elif user_menu == 'Top 10':
             y='Gold',
             color='Name'
         ).properties(
-            width=600,
+            width=800,
             height=400,
-            title='Top 10 Gold Medalist'
+            title='Top 10 Gold Medalists'
         )
         st.altair_chart(fig)
         fig = alt.Chart(top10athlete).mark_bar().encode(
-            x=alt.X('Name', sort='-y',axis=alt.Axis(labelAngle=-80)),
+            x=alt.X('Name', sort='-y',axis=alt.Axis(labelAngle=-85)),
             y='Silver',
             color='Name'
         ).properties(
-            width=600,
+            width=800,
             height=400,
-            title='Top 10 Silver Medalist'
+            title='Top 10 Silver Medalists'
         )
         st.altair_chart(fig)
         fig = alt.Chart(top10athlete).mark_bar().encode(
@@ -283,9 +283,9 @@ elif user_menu == 'Top 10':
             y='Bronze',
             color='Name'
         ).properties(
-            width=600,
+            width=800,
             height=400,
-            title='Top 10 Bronze Medalist'
+            title='Top 10 Bronze Medalists'
         )
         st.altair_chart(fig)
 
