@@ -114,61 +114,58 @@ elif user_menu == 'Sex Based Analysis':
     selected_country = st.sidebar.selectbox('Select a Country',country_list)
 
     # Dropped Duplicate Rows 
-    
     medal_tally=athletes_df.drop_duplicates(subset={'Team','NOC','Games','Year','City','Sport','Event','Medal'})
 
-    total_athletes=medal_tally['ID'].count()
-    total_male_athlete=medal_tally.loc[medal_tally['Sex']=='M']['ID'].count()
-    total_female_athlete=medal_tally.loc[medal_tally['Sex']=='F']['ID'].count()
+    total_athletes=medal_tally[medal_tally['region']==selected_country].groupby('Sex')
+    total_male_athlete=total_athletes.count()['ID']['M']
+    total_female_athlete=total_athletes.count()['ID']['F']
     
-    color_scheme=['aquamarine','turquoise']
-    
-    # Plotting Doughnut Chart For Total Athletes
-
-    st.markdown("#### Total Athletes")
+    color_scheme=['aquamarine','turquoise'] 
 
     fig=plt.figure(figsize=(10,6))
-    fig.patch.set_facecolor('#0e1117')
-    plt.rcParams['text.color'] = 'white'
-
-    circle=plt.Circle((0,0),0.5,color='white')
-
-    data=[total_male_athlete,total_female_athlete]
     
-    plt.pie(data,labels=['Male','Female'],colors=color_scheme,autopct=lambda pct: sc.pie_pct(pct, data),counterclock=False,startangle=90,pctdistance=0.75,)
-    plt.axis('equal')
-    plt.legend(title='Gender',facecolor='#262730',edgecolor='#262730',labelcolor='white')
-    plt.gca().add_artist(circle)
-    
-    st.pyplot(fig)
-
+    source=pd.DataFrame({
+        "Gender":['Male','Female'],
+        "Count":[total_male_athlete,total_female_athlete]
+    })
+    fig=alt.Chart(source).mark_arc(innerRadius=70).encode(
+    theta="Count:Q",
+    color=alt.Color("Gender:N",scale=alt.Scale(range=['aquamarine','turquoise'])),
+    ).properties(
+        height=450,
+    ).configure_legend(
+        orient="bottom"
+    )
+    st.altair_chart(fig, use_container_width=True)
+    st.dataframe(source, use_container_width=True)
     # Plotting Bar chart for Sex Based Medal Distribution According To Each Country
-    st.markdown(f"#### Medal Count by Medal Type and Gender For {selected_country}")
+    heading=f"Medal Count by Medal Type and Gender For {selected_country}"
     gk = bc.mf_medal_tally(medal_tally,selected_country)
+
     
-    # Create the figure and axes
-    fig, ax = plt.subplots(figsize=(9, 5.5))
-    fig.set_facecolor('#262730')
-    # ax.patch.set_facecolor('#262730')
-
-    # Plot the grouped bar chart
-    gk.plot(kind='bar', width=0.7, color=['aquamarine','turquoise'], ax=ax)
-    ax.set_xlabel('Medal',color='white')
-    ax.set_ylabel('Count',color='white')
-    ax.legend(title='Gender', bbox_to_anchor=(1, 1), facecolor='#262730',edgecolor='#262730',labelcolor='white')
-
-    # Set the grid color to light gray
-    ax.xaxis.grid(True, color='lightgray')
-    ax.yaxis.grid(True, color='lightgray')
-
-    # Make the grid appear behind the bars
-    ax.set_axisbelow(True)
-    plt.tight_layout()
-    st.pyplot(fig)
-
-    # Print Raw Data
-    st.dataframe(gk, use_container_width=True)
-
+    fig=alt.Chart(gk).mark_bar().encode(
+    x=alt.X("Gender:N").axis(labelAngle=0),
+    y='count:Q',
+    color=alt.Color('Gender:N',scale=alt.Scale(range=['aquamarine','turquoise'])),
+    column='Medal:N'
+    ).properties(
+        width=140,
+        height=400,
+        # title=heading
+    ).configure_title(
+        align='center',
+        fontSize=25,
+    ).configure_header(
+        titleColor='#9ca0ad',
+        titleFontSize=14,
+        labelColor='#9ca0ad',
+        labelFontSize=14
+    )
+    
+    st.altair_chart(fig)
+    pivot_data=bc.mf_medal_pivot_data(medal_tally,selected_country)
+    st.dataframe(pivot_data, use_container_width=True)
+    
 elif user_menu == 'Performance wise Analysis':
 
     st.sidebar.title("Performance wise Analysis")
