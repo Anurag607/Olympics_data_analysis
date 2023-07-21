@@ -47,4 +47,4 @@ def MaleFemaileParticipationAnalysis(athletes_df, df_athletes, df_regions):
     plt.ylabel("Player Count")
     plt.title("Player Participation vs Host Country")
 
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(fig)
