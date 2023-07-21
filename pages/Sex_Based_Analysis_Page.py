@@ -55,7 +55,7 @@ def SexBasedAnalysis(athletes_df):
     ).properties(
         width=140,
         height=400,
-        # title=heading
+        title=heading
     ).configure_title(
         align='center',
         fontSize=25,

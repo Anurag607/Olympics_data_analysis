@@ -13,13 +13,14 @@ st.sidebar.markdown(
     'Data source: https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results'
 )
 
+athletes = pd.read_csv("./assets/athlete_events.csv")
+regions = pd.read_csv('./assets/noc_regions.csv')
+
 
 @st.cache_data(persist=True)
 # Loading the data form the CSV files...
 def load_data():
-    athletes_df = pd.read_csv("./assets/athlete_events.csv")
-    regions = pd.read_csv('./assets/noc_regions.csv')
-    athletes_df = preprocess.preprocess(athletes_df, regions)
+    athletes_df = preprocess.preprocess(athletes, regions)
     return athletes_df
 
 
@@ -44,14 +45,14 @@ if user_menu == 'Dummy Page':
 elif user_menu == 'Country-wise Analysis':
     CountryWiseAnalysis(athletes_df)
 
-elif user_menu == 'Athlete-wise Analysis':
+elif user_menu == 'Athlete wise Analysis':
     AthleteWiseAnalysis(athletes_df)
 
 elif user_menu == 'Sex Based Analysis':
     SexBasedAnalysis(athletes_df)
 
 elif user_menu == 'Male-Female Participation Analysis':
-    MaleFemaileParticipationAnalysis(athletes_df)
+    MaleFemaileParticipationAnalysis(athletes_df, athletes, regions)
 
 elif user_menu == 'Performance wise Analysis':
     PerformanceWiseAnalysis(athletes_df)

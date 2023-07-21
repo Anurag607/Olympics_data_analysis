@@ -2,7 +2,6 @@ from Libraries import alt, st
 
 
 def PerformanceWiseAnalysis(athletes_df):
-    st.title("Performance wise Analysis")
     st.sidebar.title("Performance wise Analysis")
     feature_list = ['Countries', 'Athletes']
     feature_list.sort()
@@ -26,7 +25,6 @@ def PerformanceWiseAnalysis(athletes_df):
             medal_tally['Silver']+medal_tally['Bronze']
         medal_tally = medal_tally.sort_values('Gold', ascending=False)
         top10countries = medal_tally.head(10)
-        top10countries
 
         fig = alt.Chart(top10countries).mark_bar().encode(
             x=alt.X('region', sort='-y', axis=alt.Axis(labelAngle=-25)),
@@ -81,7 +79,6 @@ def PerformanceWiseAnalysis(athletes_df):
         athlete['Total'] = athlete['Gold']+athlete['Silver']+athlete['Bronze']
         athlete = athlete.sort_values('Total', ascending=False)
         top10athlete = athlete.head(10)
-        top10athlete
 
         fig = alt.Chart(top10athlete).mark_bar().encode(
             x=alt.X('Name', sort='-y', axis=alt.Axis(labelAngle=-80)),
