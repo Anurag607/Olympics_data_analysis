@@ -2,6 +2,7 @@ from Libraries import st, sns, plt, base64
 
 
 def DummyPage(athletes_df):
+    st.title("Dummy Page")
     # Sidebar - Team Selection
     sorted_team = sorted(athletes_df['Team'].unique())
     selected_team = st.sidebar.multiselect('Team', sorted_team)

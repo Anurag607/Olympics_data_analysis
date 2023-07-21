@@ -2,6 +2,7 @@ from Libraries import pd, alt, st, plt, bc
 
 
 def SexBasedAnalysis(athletes_df):
+    st.title("Sex Based Analysis")
     st.sidebar.title("Sex Based Analysis")
     country_list = athletes_df['region'].dropna().unique().tolist()
     country_list.sort()
@@ -25,26 +26,31 @@ def SexBasedAnalysis(athletes_df):
         "Gender": ['Male', 'Female'],
         "Count": [total_male_athlete, total_female_athlete]
     })
+
     fig = alt.Chart(source).mark_arc(innerRadius=70).encode(
         theta="Count:Q",
         color=alt.Color("Gender:N", scale=alt.Scale(
-            range=['aquamarine', 'turquoise'])),
+            range=color_scheme)),
     ).properties(
         height=450,
     ).configure_legend(
         orient="bottom"
     )
+
     st.altair_chart(fig, use_container_width=True)
     st.dataframe(source, use_container_width=True)
+
     # Plotting Bar chart for Sex Based Medal Distribution According To Each Country
+
     heading = f"Medal Count by Medal Type and Gender For {selected_country}"
+
     gk = bc.mf_medal_tally(medal_tally, selected_country)
 
     fig = alt.Chart(gk).mark_bar().encode(
         x=alt.X("Gender:N").axis(labelAngle=0),
         y='count:Q',
         color=alt.Color('Gender:N', scale=alt.Scale(
-            range=['aquamarine', 'turquoise'])),
+            range=color_scheme)),
         column='Medal:N'
     ).properties(
         width=140,
@@ -60,6 +66,6 @@ def SexBasedAnalysis(athletes_df):
         labelFontSize=14
     )
 
-    st.altair_chart(fig)
+    st.altair_chart(fig, use_container_width=False)
     pivot_data = bc.mf_medal_pivot_data(medal_tally, selected_country)
     st.dataframe(pivot_data, use_container_width=True)

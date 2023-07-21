@@ -2,6 +2,7 @@ from Libraries import st, utils
 
 
 def CountryWiseAnalysis(athletes_df):
+    st.title('Country-wise Analysis')
     st.sidebar.title('Country-wise Analysis')
 
     country_list = athletes_df['region'].dropna().unique().tolist()

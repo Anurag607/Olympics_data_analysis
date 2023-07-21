@@ -8,9 +8,6 @@ from pages.Country_Wise_Analysis_Page import CountryWiseAnalysis
 from pages.Performance_Wise_Analysis_Page import PerformanceWiseAnalysis
 from pages.Male_Female_Participation_Analysis_Page import MaleFemaileParticipationAnalysis
 
-
-st.title('Olympics Data Analysis')
-
 st.sidebar.title('Olympics Data Analysis')
 st.sidebar.markdown(
     'Data source: https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results'

@@ -2,6 +2,7 @@ from Libraries import alt, st
 
 
 def PerformanceWiseAnalysis(athletes_df):
+    st.title("Performance wise Analysis")
     st.sidebar.title("Performance wise Analysis")
     feature_list = ['Countries', 'Athletes']
     feature_list.sort()
