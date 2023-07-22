@@ -1,4 +1,5 @@
 from Libraries import pd, alt, st, plt, bc
+from streamlit_main import athletes_df
 
 
 def SexBasedAnalysis(athletes_df):
@@ -8,6 +9,9 @@ def SexBasedAnalysis(athletes_df):
     country_list.sort()
 
     selected_country = st.sidebar.selectbox('Select a Country', country_list)
+
+    st.markdown(
+        f"### Male Female Participation Over the Years For {selected_country}")
 
     # Dropped Duplicate Rows
     medal_tally = athletes_df.drop_duplicates(
@@ -69,3 +73,6 @@ def SexBasedAnalysis(athletes_df):
     st.altair_chart(fig, use_container_width=False)
     pivot_data = bc.mf_medal_pivot_data(medal_tally, selected_country)
     st.dataframe(pivot_data, use_container_width=True)
+
+
+SexBasedAnalysis(athletes_df)

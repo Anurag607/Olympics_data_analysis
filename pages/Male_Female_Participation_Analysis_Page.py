@@ -1,4 +1,5 @@
 from Libraries import st, pd, plt, np, alt
+from streamlit_main import athletes_df, athletes, regions
 
 
 def MaleFemaileParticipationAnalysis(athletes_df, df_athletes, df_regions):
@@ -48,3 +49,6 @@ def MaleFemaileParticipationAnalysis(athletes_df, df_athletes, df_regions):
     plt.title("Player Participation vs Host Country")
 
     st.pyplot(fig)
+
+
+MaleFemaileParticipationAnalysis(athletes_df, athletes, regions)

@@ -1,7 +1,6 @@
 from Libraries import st, pd, preprocess
 
 # Page Imports
-from pages.Dummy_Page import DummyPage
 from pages.Sex_Based_Analysis_Page import SexBasedAnalysis
 from pages.Athlete_Wise_Analysis_Page import AthleteWiseAnalysis
 from pages.Country_Wise_Analysis_Page import CountryWiseAnalysis
@@ -26,33 +25,15 @@ def load_data():
 
 athletes_df = load_data()
 
-# Defining the user menu in the sidebar...
-user_menu = st.sidebar.radio(
-    'Select an Option',
-    (
-        'Dummy Page',
-        'Country-wise Analysis',
-        'Athlete wise Analysis',
-        'Sex Based Analysis',
-        'Male-Female Participation Analysis',
-        'Performance wise Analysis'
-    )
-)
+# Page Navigation
 
-if user_menu == 'Dummy Page':
-    DummyPage(athletes_df)
+st.markdown("## Olympics Data Analysis")
+st.markdown("#### Select a page from the sidebar to start analyzing")
+st.markdown(
+    "Data source: https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results")
 
-elif user_menu == 'Country-wise Analysis':
-    CountryWiseAnalysis(athletes_df)
-
-elif user_menu == 'Athlete wise Analysis':
-    AthleteWiseAnalysis(athletes_df)
-
-elif user_menu == 'Sex Based Analysis':
-    SexBasedAnalysis(athletes_df)
-
-elif user_menu == 'Male-Female Participation Analysis':
-    MaleFemaileParticipationAnalysis(athletes_df, athletes, regions)
-
-elif user_menu == 'Performance wise Analysis':
-    PerformanceWiseAnalysis(athletes_df)
+st.markdown("### Contributors")
+st.markdown("- [Bhavik Agarwal](https://github.com/Bhavik-ag)")
+st.markdown("- [Anurag Goswami](https://github.com/Anurag607)")
+st.markdown("- [Ayushi Mourya](https://github.com/AyushiMourya22)")
+st.markdown("- [Arjit Patel](https://github.com/Arjit1136)")

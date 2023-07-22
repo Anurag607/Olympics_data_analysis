@@ -1,8 +1,10 @@
 from Libraries import alt, st
+from streamlit_main import athletes_df
 
 
 def PerformanceWiseAnalysis(athletes_df):
-    st.sidebar.title("Performance wise Analysis")
+    st.title('Performance Based Analysis')
+    st.sidebar.title("Performance Based Analysis")
     feature_list = ['Countries', 'Athletes']
     feature_list.sort()
 
@@ -120,3 +122,6 @@ def PerformanceWiseAnalysis(athletes_df):
             title='Top 10 Bronze Medalists'
         )
         st.altair_chart(fig)
+
+
+PerformanceWiseAnalysis(athletes_df)

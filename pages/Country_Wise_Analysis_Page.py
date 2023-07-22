@@ -1,4 +1,5 @@
 from Libraries import st, utils
+from streamlit_main import athletes_df
 
 
 def CountryWiseAnalysis(athletes_df):
@@ -22,3 +23,6 @@ def CountryWiseAnalysis(athletes_df):
         data = athletes_df[athletes_df['region'] ==
                            selected_country].reset_index(drop=True)
         st.write(data)
+
+
+CountryWiseAnalysis(athletes_df)
