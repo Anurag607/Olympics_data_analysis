@@ -16,13 +16,5 @@ def CountryWiseAnalysis(athletes_df):
     country_df = utils.yearwise_medal_data(athletes_df, selected_country)
     fig = st.line_chart(country_df, x="Year", y="Medal")
 
-    st.markdown("### Raw Data")
-    if selected_country == 'Overall':
-        st.write(athletes_df)
-    else:
-        data = athletes_df[athletes_df['region'] ==
-                           selected_country].reset_index(drop=True)
-        st.write(data)
-
 
 CountryWiseAnalysis(athletes_df)
